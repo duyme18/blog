@@ -10,6 +10,8 @@ public class Post {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String titlePost;
+
+    @Lob
     private String bodyText;
 
     @ManyToOne

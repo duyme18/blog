@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 
-
 public interface PostRepository extends PagingAndSortingRepository<Post, Long> {
     Iterable<Post> findAllByCatergory(Catergory catergory);
 
+    Page<Post> findAllByTitlePostContaining(String titlepost, Pageable pageable);
 }

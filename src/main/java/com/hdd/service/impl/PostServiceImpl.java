@@ -6,6 +6,8 @@ import com.hdd.model.Post;
 import com.hdd.repository.PostRepository;
 import com.hdd.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class PostServiceImpl implements PostService {
 
@@ -13,8 +15,8 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Override
-    public Iterable<Post> findAll() {
-        return postRepository.findAll();
+    public Page<Post> findAll(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
     @Override
@@ -35,5 +37,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Iterable<Post> findAllByCatergory(Catergory catergory) {
         return postRepository.findAllByCatergory(catergory);
+    }
+
+    @Override
+    public Page<Post> findAllByTitlePostContaining(String titlepost, Pageable pageable) {
+        return postRepository.findAllByTitlePostContaining(titlepost, pageable);
     }
 }

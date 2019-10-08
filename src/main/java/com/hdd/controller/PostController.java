@@ -7,8 +7,6 @@ import com.hdd.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,10 +23,11 @@ public class PostController {
     private CatergoryService catergoryService;
 
     @ModelAttribute("catergory")
-    public Iterable<Catergory> catergory(){
+    public Iterable<Catergory> catergory() {
         return catergoryService.findAll();
     }
-//
+
+    //
 //    private String getPrincipal(){
 //        String userName = null;
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -41,36 +40,28 @@ public class PostController {
 //        return userName;
 //    }
 //
-//    @GetMapping("/admin")
-//    public ModelAndView listPost(@RequestParam("s") Optional<String> s, Pageable pageable){
-//        Page<Post> posts;
-//        if(s.isPresent()){
-//            posts = postService.findAllByTitlePostContaining(s.get(), pageable);
-//        } else {
-//            posts = postService.findAll(pageable);
-//        }
-//        ModelAndView modelAndView = new ModelAndView("/admin/post/list");
-//        modelAndView.addObject("posts", posts);
-//        modelAndView.addObject("user", getPrincipal());
-//        return modelAndView;
-//    }
-
     @GetMapping("/posts")
-    public ModelAndView listCustomers(){
-        Iterable<Post> posts = postService.findAll();
+    public ModelAndView listPost(@RequestParam("s") Optional<String> s, Pageable pageable) {
+        Page<Post> posts;
+        if (s.isPresent()) {
+            posts = postService.findAllByTitlePostContaining(s.get(), pageable);
+        } else {
+            posts = postService.findAll(pageable);
+        }
         ModelAndView modelAndView = new ModelAndView("/post/list");
         modelAndView.addObject("posts", posts);
         return modelAndView;
     }
+
     @GetMapping("/create-post")
-    public ModelAndView showCreateForm(){
+    public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/post/create");
         modelAndView.addObject("post", new Post());
         return modelAndView;
     }
 
     @PostMapping("/create-post")
-    public ModelAndView savePost(@ModelAttribute("post") Post post){
+    public ModelAndView savePost(@ModelAttribute("post") Post post) {
         postService.save(post);
         ModelAndView modelAndView = new ModelAndView("/post/create");
         modelAndView.addObject("post", new Post());
@@ -79,21 +70,21 @@ public class PostController {
     }
 
     @GetMapping("/edit-post/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id){
+    public ModelAndView showEditForm(@PathVariable Long id) {
         Post post = postService.findById(id);
-        if(post != null) {
+        if (post != null) {
             ModelAndView modelAndView = new ModelAndView("/post/edit");
             modelAndView.addObject("post", post);
             return modelAndView;
 
-        }else {
+        } else {
             ModelAndView modelAndView = new ModelAndView("/error.404");
             return modelAndView;
         }
     }
 
     @PostMapping("/edit-post")
-    public ModelAndView updatePost(@ModelAttribute("post") Post post){
+    public ModelAndView updatePost(@ModelAttribute("post") Post post) {
         postService.save(post);
         ModelAndView modelAndView = new ModelAndView("/post/edit");
         modelAndView.addObject("post", post);
@@ -102,21 +93,21 @@ public class PostController {
     }
 
     @GetMapping("/delete-post/{id}")
-    public ModelAndView showDeleteForm(@PathVariable Long id){
+    public ModelAndView showDeleteForm(@PathVariable Long id) {
         Post post = postService.findById(id);
-        if(post != null) {
+        if (post != null) {
             ModelAndView modelAndView = new ModelAndView("/post/delete");
             modelAndView.addObject("post", post);
             return modelAndView;
 
-        }else {
+        } else {
             ModelAndView modelAndView = new ModelAndView("/error.404");
             return modelAndView;
         }
     }
 
     @PostMapping("/delete-post")
-    public String deletePost(@ModelAttribute("post") Post post){
+    public String deletePost(@ModelAttribute("post") Post post) {
         postService.remove(post.getId());
         return "redirect:posts";
     }
