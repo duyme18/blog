@@ -14,10 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CatergoryController {
+
     @Autowired
     private CatergoryService catergoryService;
+
     @Autowired
     private PostService postService;
+
     @GetMapping("/catergory")
     public ModelAndView listCatergory(){
         Iterable<Catergory> catergory = catergoryService.findAll();
